@@ -24,23 +24,33 @@ enabled, and use ngrok access controls or HTTP authentication where appropriate.
    installation, you can keep this tunnel and change only the token. If
    Home Assistant listens on another port or you want to expose another
    service, update the tunnel's `addr` as described in [Tunnel options](#option-tunnels).
-5. **Configure trusted proxies in Home Assistant.** Add the ngrok add-on's
-   network address or the appropriate add-on subnet to the `trusted_proxies`
-   list in Home Assistant's `configuration.yaml`. A typical Supervisor
-   installation uses the example below, but network ranges can differ if you
-   customized the Supervisor or Docker network:
+5. **Find the proxy address and configure `trusted_proxies`.** First, try
+   opening the tunnel's public URL. If Home Assistant rejects the request as
+   coming from an untrusted proxy, open **Settings > System > Logs** and inspect
+   the Home Assistant Core log. Find the message about a request received from
+   an untrusted reverse proxy; it includes the source IP address that Core
+   actually sees. Use that address (or the narrow subnet containing the
+   add-on's address) in `trusted_proxies`. This is the proxy's address on the
+   local Home Assistant network, not your browser's public IP or the ngrok
+   public URL.
+
+   Add the value under the `http:` section of Home Assistant's
+   `configuration.yaml`, alongside `use_x_forwarded_for: true`. For example,
+   replace the sample subnet below with the address or subnet identified from
+   your Core log:
 
    ```yaml
    http:
      use_x_forwarded_for: true
      trusted_proxies:
-       - 172.30.32.0/24
-       - 172.30.33.0/24
+       - 172.30.32.1
    ```
 
-   Only trust the proxy addresses that apply to your installation. Do not add a
-   broad range such as `0.0.0.0/0`. See [Home Assistant's reverse proxy
-   documentation][trusted_proxies_docs] for details and troubleshooting.
+   The example address is illustrative; use the exact source IP from your log.
+   If the add-on's source address can change, configure only the smallest
+   subnet that contains its possible addresses. Do not add a broad range such
+   as `0.0.0.0/0`. See [Home Assistant's reverse proxy
+   documentation][trusted_proxies_docs] for details about proxy configuration.
 6. **Start the add-on.** Open its **Info** tab and select **Start**. Optionally
    enable **Start on boot** so the tunnel starts automatically after a reboot.
 7. **Restart Home Assistant Core** after changing `configuration.yaml`, then
@@ -63,10 +73,10 @@ After both the add-on and Home Assistant Core are running:
 3. Open that URL in a browser that can reach the internet. It should show the
    Home Assistant sign-in page.
 
-If Home Assistant reports an untrusted proxy, use the source address shown in
-the Home Assistant log to identify which add-on address or subnet belongs in
-`trusted_proxies`. If the tunnel does not appear, check that `auth_token` is
-valid and that `addr` points to a service and port reachable from the add-on.
+If Home Assistant reports an untrusted proxy, use the Core log procedure above
+to find the source address and update `trusted_proxies`. If the tunnel does
+not appear, check that `auth_token` is valid and that `addr` points to a
+service and port reachable from the add-on.
 
 ## Add-on configuration
 
