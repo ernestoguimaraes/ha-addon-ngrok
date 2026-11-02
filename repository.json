@@ -1,5 +1,5 @@
 {
   "name": "Home Assistant Addon ngrok client installer (Unofficial)",
-  "url": "https://github.com/pssc/ha-addon-ngrok",
-  "maintainer": "Phillip Camp"
+  "url": "https://github.com/ernestoguimaraes/ha-addon-ngrok",
+  "maintainer": "Ernesto Guimaraes"
 }
