@@ -1,6 +1,6 @@
 {
   "name": "ngrok Client Installer (Unofficial)",
-  "version": "15.0.5.3.0",
+  "version": "21.0.10.3.0",
   "slug": "ngrok",
   "description": "A unofficial ngrok client installer and configuator for Home Assistant",
   "init": false,
@@ -9,8 +9,7 @@
   "stage": "experimental",
   "arch": [
     "aarch64",
-    "amd64",
-    "armv7"
+    "amd64"
   ],
   "startup": "system",
   "boot": "auto",
@@ -36,7 +35,7 @@
   },
   "schema": {
     "log_level": "list(crit|warn|error|info|debug)",
-    "auth_token": "str?",
+    "auth_token": "password",
     "region": "list(us|eu|ap|au|sa|jp|in)?",
     "tunnels": [
       {

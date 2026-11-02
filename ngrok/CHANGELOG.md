@@ -1,5 +1,11 @@
 ## Changes
 
+### 21.0.10.3.0
+- Upgrade the Home Assistant base image to v21.0.10.
+- Drop armv7 support to match the base image architectures.
+- Mask the ngrok auth token in add-on configuration and keep it out of debug logs.
+- Use the current Bashio app port function.
+
 ### 2.1.10
 - log version of client
 - v3 stable client installed and configured
