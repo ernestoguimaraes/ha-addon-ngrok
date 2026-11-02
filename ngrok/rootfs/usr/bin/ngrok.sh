@@ -1,14 +1,15 @@
 #!/usr/bin/with-contenv bashio
 set -e
+umask 077
 bashio::log.info "$(ngrok --version)"
 bashio::log.debug "Building ngrok.yml..."
 configPath="/ngrok-config/ngrok.yml"
 mkdir -p /ngrok-config
 echo "log: stdout" > $configPath
 echo "version: 1" >> $configPath
-bashio::log.debug "Web interface port: $(bashio::addon.port 4040)"
-if bashio::var.has_value "$(bashio::addon.port 4040)"; then
-  echo "web_addr: 0.0.0.0:$(bashio::addon.port 4040)" >> $configPath
+bashio::log.debug "Web interface port: $(bashio::app.port 4040)"
+if bashio::var.has_value "$(bashio::app.port 4040)"; then
+  echo "web_addr: 0.0.0.0:$(bashio::app.port 4040)" >> $configPath
 fi
 if bashio::var.has_value "$(bashio::config 'log_level')"; then
   echo "log_level: $(bashio::config 'log_level')" >> $configPath
@@ -82,7 +83,5 @@ for id in $(bashio::config "tunnels|keys"); do
     echo "    metadata: $metadata" >> $configPath
   fi
 done
-configfile=$(cat $configPath)
-bashio::log.debug "Config file: \n${configfile}"
 bashio::log.info "Starting ngrok..."
 ngrok start --config $configPath --all
